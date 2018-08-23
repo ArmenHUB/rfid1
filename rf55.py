@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*
 
 import RPi.GPIO as GPIO
 import MFRC522
@@ -13,7 +13,7 @@ green = 18
 
 
 #Настройка портов вывода
-#GPIO.setmode(GPIO.BOARD) # Это значит, что считаем пины по порядку с левого верхнего (3v3 - первый)
+GPIO.setmode(GPIO.BOARD) # Это значит, что считаем пины по порядку с левого верхнего (3v3 - первый)
 #GPIO.setup(red, GPIO.OUT, initial=1) # Устанавливаем пин 18 на вывод
 GPIO.setup(green, GPIO.OUT, initial=0) # тоже самое с пином 11
 #GPIO.setup(speaker, GPIO.OUT, initial=0) # пин 16
