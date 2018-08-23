@@ -55,6 +55,7 @@ while continue_reading:
            database="Door"
         )
         mycursor = mydb.cursor()
+        
        sql = "SELECT UID FROM cards WHERE UID =  %s"
 
        val = (UIDcode)
