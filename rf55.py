@@ -50,7 +50,7 @@ while continue_reading:
 		print UIDcode
 		     
 		mydb = mysql.connector.connect(
-		   host="10.11.1.188",
+		   host="localhost",
 		   user="root",
 		   passwd="test1234",
 		   database="Door"
