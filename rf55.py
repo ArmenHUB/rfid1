@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import MFRC522
 import signal
 import time
-#import mysql.connector
+import mysql.connector
 
 #red = 11
 green = 18
@@ -48,3 +48,38 @@ while continue_reading:
 		# выводим UID карты на экран
 		UIDcode = "%s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
 		print UIDcode
+		
+		mydb = mysql.connector.connect(
+		   host="10.11.1.188",
+		   user="root",
+		   passwd="test1234",
+		   database="Door"
+		)
+		mycursor = mydb.cursor()
+		
+	   sql = "SELECT UID FROM cards WHERE UID = %s" % UIDcode
+
+	   rows_count =  mycursor.execute(sql)       
+		# Если карта есть в списке
+		 if rows_count > 0:
+		# то дверь открывается
+		# предполагается, что замок открывается при подаче на
+		# него (на реле, управляющее замком), напряжения
+		# т.е. им управляет переключаемое реле
+		# т.е. замок открывается при высоком значении пина doorlock
+		# при этом, горит зеленая, тухнет красная и пищит динамик
+
+				GPIO.output((green), (1))
+				print "Door open"
+
+				# успеть дернуть за 1 секунду
+				time.sleep(1)
+				GPIO.output((green), (0))
+
+				# потом дверь закрывается, о чем нас извещают
+				print "Door closed"
+
+		# А если карты в списке нет, то моргаем и пищим
+		else:
+				GPIO.output((green), (0))
+				print "Unrecognised Card"
