@@ -62,10 +62,13 @@ while continue_reading:
 				print "Door open"
 
 				# успеть дернуть за 1 секунду
-				time.sleep(1)
+				time.sleep(2)
 				GPIO.output((green), (0))
 
 				# потом дверь закрывается, о чем нас извещают
 				print "Door closed"
 
 		# А если карты в списке нет, то моргаем и пищим
+		else:
+				GPIO.output((green), (0))
+				print "Unrecognised Card"
