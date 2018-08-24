@@ -16,7 +16,7 @@ green = 18
 #Настройка портов вывода
 GPIO.setmode(GPIO.BOARD) # Это значит, что считаем пины по порядку с левого верхнего (3v3 - первый)
 #GPIO.setup(red, GPIO.OUT, initial=1) # Устанавливаем пин 18 на вывод
-#GPIO.setup(green, GPIO.OUT, initial=0) # тоже самое с пином 11
+GPIO.setup(green, GPIO.OUT, initial=0) # тоже самое с пином 11
 #GPIO.setup(speaker, GPIO.OUT, initial=0) # пин 16
 #GPIO.setup(doorlock, GPIO.OUT, initial=0) # пин 12
 
@@ -46,5 +46,5 @@ while continue_reading:
 	# Если считали UID, то идем дальше
 	if status == MIFAREReader.MI_OK:
 		# выводим UID карты на экран
-		UIDcode = str(uid[0])+str(uid[1])+str(uid[2])+str(uid[3])
-		print UIDcode
+		UIDcode = str(uid[0],)+str(uid[1],)+str(uid[2],)+str(uid[3],)
+		print UIDcode		
