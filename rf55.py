@@ -49,8 +49,20 @@ while continue_reading:
 		UIDcode = "%s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
 		print UIDcode
 		     
+		mydb = mysql.connector.connect(
+		   host="10.11.1.188",
+		   user="root",
+		   passwd="test1234",
+		   database="Door"
+		)
+		mycursor = mydb.cursor()
+		
+		sql = "SELECT UID FROM cards WHERE UID = %s" % UIDcode
+		
+		rows_count =  mycursor.execute(sql) 
+		
 		# Если карта есть в списке
-	        if UIDcode == "83,30,96,39":
+	        if rows_count > 0:
 		# то дверь открывается
 		# предполагается, что замок открывается при подаче на
 		# него (на реле, управляющее замком), напряжения
