@@ -70,5 +70,5 @@ while continue_reading:
 
 		# А если карты в списке нет, то моргаем и пищим
 		 else:
-				GPIO.output((green), (0))
-				print "Unrecognised Card"
+			GPIO.output((green), (0))
+			print "Unrecognised Card"
