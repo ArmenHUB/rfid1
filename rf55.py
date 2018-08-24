@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*
 
 import RPi.GPIO as GPIO
-import MFRC522
+import MFRC522-python
 import signal
 import time
 import mysql.connector
