@@ -46,5 +46,5 @@ while continue_reading:
 	# Если считали UID, то идем дальше
 	if status == MIFAREReader.MI_OK:
 		# выводим UID карты на экран
-		UIDcode = uid[0],uid[1],uid[2],uid[3]
-		print UIDcode		
+		UIDcode = "%s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
+		print UIDcode
