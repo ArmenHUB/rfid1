@@ -56,9 +56,9 @@ while continue_reading:
 		)
 		mycursor = mydb.cursor()
 		
-	   sql = "SELECT UID FROM cards WHERE UID =  UIDcode"
+	   sql = "SELECT UID FROM cards WHERE UID =  %s"
 	
-	   #val = (UIDcode,)
+	   val = (UIDcode, )
 
 	   rows_count =  mycursor.execute(sql, val)        
 		# Если карта есть в списке
