@@ -69,6 +69,3 @@ while continue_reading:
 				print "Door closed"
 
 		# А если карты в списке нет, то моргаем и пищим
-		 else:
-			GPIO.output((green), (0))
-			print "Unrecognised Card"
