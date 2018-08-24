@@ -57,9 +57,10 @@ while continue_reading:
 		)
 		mycursor = mydb.cursor()
 		
-	   sql = "SELECT UID FROM cards WHERE UID = %s" % UIDcode
+	   sql = "SELECT UID FROM cards WHERE UID = %s" 
+	   val = (UIDcode,)
 
-	   rows_count =  mycursor.execute(sql)       
+	   rows_count =  mycursor.execute(sql,var)       
 		# Если карта есть в списке
 		 if rows_count > 0:
 		# то дверь открывается
