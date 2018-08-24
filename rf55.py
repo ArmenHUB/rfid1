@@ -1,4 +1,4 @@
- -*- coding: utf-8 -*
+# -*- coding: utf-8 -*
 
 import RPi.GPIO as GPIO
 import MFRC522
@@ -56,9 +56,11 @@ while continue_reading:
 		)
 		mycursor = mydb.cursor()
 		
-	   sql = "SELECT UID FROM cards WHERE UID = %s" % UIDcode
-
-	   rows_count =  mycursor.execute(sql)        
+	   sql = "SELECT UID FROM cards WHERE UID = %s"
+	
+	   val = (UIDcode,)
+	   
+	   rows_count =  mycursor.execute(sql,val)        
 		# Если карта есть в списке
 		 if rows_count > 0:
 		# то дверь открывается
