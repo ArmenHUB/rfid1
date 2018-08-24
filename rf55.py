@@ -62,7 +62,7 @@ while continue_reading:
 		val = (UIDcode,)
 		
 		rows_count =  mycursor.execute(sql,val) 
-		
+		print rows_count
 		# Если карта есть в списке
 	        if rows_count > 0:
 		# то дверь открывается
