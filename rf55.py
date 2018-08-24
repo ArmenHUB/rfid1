@@ -50,7 +50,7 @@ while continue_reading:
 		print UIDcode
 		     
 		# Если карта есть в списке
-		  if UIDcode == 83,30,96,39:
+	        if UIDcode == 83,30,96,39:
 		# то дверь открывается
 		# предполагается, что замок открывается при подаче на
 		# него (на реле, управляющее замком), напряжения
@@ -69,6 +69,6 @@ while continue_reading:
 				print "Door closed"
 
 		# А если карты в списке нет, то моргаем и пищим
-		else:
+		 else:
 				GPIO.output((green), (0))
 				print "Unrecognised Card"
