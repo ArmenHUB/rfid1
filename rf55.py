@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import MFRC522
 import signal
 import time
-#import mysql.connector
+import mysql.connector
 
 #red = 11
 green = 18
