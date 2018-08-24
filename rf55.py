@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*
+ -*- coding: utf-8 -*
 
 import RPi.GPIO as GPIO
 import MFRC522
