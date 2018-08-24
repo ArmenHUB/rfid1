@@ -71,14 +71,14 @@ while continue_reading:
 		# при этом, горит зеленая, тухнет красная и пищит динамик
 
 				#GPIO.output((green), (1))
-				print "Door open"
+				#print "Door open"
 
 				# успеть дернуть за 1 секунду
 				#time.sleep(1)
 				#GPIO.output((green), (0))
 
 				# потом дверь закрывается, о чем нас извещают
-				print "Door closed"
+				#print "Door closed"
 
 		# А если карты в списке нет, то моргаем и пищим
 		#else:
