@@ -64,7 +64,7 @@ while continue_reading:
 		rows_count =  mycursor.execute(sql,val) 
 		print rows_count
 		# Если карта есть в списке
-	        if rows_count:
+	        if rows_count > 0:
 		# то дверь открывается
 		# предполагается, что замок открывается при подаче на
 		# него (на реле, управляющее замком), напряжения
