@@ -1,88 +1,70 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*
 
-import RPi.GPIO as GPIO
+import mysql.connector
+from mysql.connector import Error
 import MFRC522
 import signal
-import time
 import mysql.connector
-
-#red = 11
-green = 18
-# speaker = 16
-# doorlock = 12
+import RPi.GPIO as GPIO
+import time
 
 
-#Настройка портов вывода
-GPIO.setmode(GPIO.BOARD) # Это значит, что считаем пины по порядку с левого верхнего (3v3 - первый)
-#GPIO.setup(red, GPIO.OUT, initial=1) # Устанавливаем пин 18 на вывод
-GPIO.setup(green, GPIO.OUT, initial=0) # тоже самое с пином 11
-#GPIO.setup(speaker, GPIO.OUT, initial=0) # пин 16
-#GPIO.setup(doorlock, GPIO.OUT, initial=0) # пин 12
+lock = 8
+
+
+# Настройка портов вывода
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+GPIO.setup(lock,GPIO.OUT)
 
 continue_reading = True
 
-def end_read(signal,frame): # что делать, если программу прервать и как её прервать
-	global continue_reading
-	print "Ctrl+C captured, ending read."
-	continue_reading = False
-	GPIO.cleanup()
+def end_read(signal, frame):  # что делать, если программу прервать и как её прервать
+    global continue_reading
+    print "Ctrl+C captured, ending read."
+    continue_reading = False
+    GPIO.cleanup()
 
 # Create an object of the class MFRC522 (??)
 MIFAREReader = MFRC522.MFRC522()
 
 while continue_reading:
+    # Сканируем карты - считываем их UID
+    (status, TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
-# Сканируем карты - считываем их UID
-	(status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+    # Если карту удалось считать, пишем "карта найдена"
+    if status == MIFAREReader.MI_OK:
+        print "Card detected"
 
-	# Если карту удалось считать, пишем "карта найдена"
-	if status == MIFAREReader.MI_OK:
-		print "Card detected"
+    # Считываем UID карты
+    (status, uid) = MIFAREReader.MFRC522_Anticoll()
 
-	# Считываем UID карты
-	(status,uid) = MIFAREReader.MFRC522_Anticoll()
-
-	# Если считали UID, то идем дальше
-	if status == MIFAREReader.MI_OK:
-		# выводим UID карты на экран
-		UIDcode = "%s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
-		print UIDcode
-		     
-		mydb = mysql.connector.connect(
-		   host="localhost",
-		   user="root",
-		   passwd="test1234",
-		   database="Door"
-		)
-		mycursor = mydb.cursor()
-		
-		sql = "SELECT UID FROM cards WHERE UID = %s"
-		
-		val = (UIDcode,)
-		
-		rows_count =  mycursor.execute(sql,val) 
-		print rows_count
-		# Если карта есть в списке
-	        if rows_count > 0:
-		# то дверь открывается
-		# предполагается, что замок открывается при подаче на
-		# него (на реле, управляющее замком), напряжения
-		# т.е. им управляет переключаемое реле
-		# т.е. замок открывается при высоком значении пина doorlock
-		# при этом, горит зеленая, тухнет красная и пищит динамик
-
-				GPIO.output((green), (1))
-				print "Door open"
-
-				# успеть дернуть за 1 секунду
-				time.sleep(2)
-				GPIO.output((green), (0))
-
-				# потом дверь закрывается, о чем нас извещают
-				print "Door closed"
-
-		# А если карты в списке нет, то моргаем и пищим
-		else:
-				GPIO.output((green), (0))
-				print "Unrecognised Card"
+    # Если считали UID, то идем дальше
+    if status == MIFAREReader.MI_OK:
+        # выводим UID карты на экран
+        UIDcode = "%s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
+        try:
+            conn = mysql.connector.connect(host='localhost',
+                                           database='Door',
+                                           user='root',
+                                           password='test1234')
+            if conn.is_connected():
+                cursor = conn.cursor()
+                sql = "SELECT `userID` FROM `cards` WHERE `UID` = '%s'" % (UIDcode)
+                cursor.execute(sql)
+                row = cursor.fetchone()
+                while row is not None:
+                    row = cursor.fetchone()
+                    sql_insert = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (1,1)"
+                    cursor1 = conn.cursor()
+                    cursor1.execute(sql_insert)
+                    GPIO.output(lock, GPIO.HIGH)
+                    print "Door open"
+                    time.sleep(2)
+                    print "Door close"
+                    GPIO.output(lock, GPIO.LOW)
+        except Error as e:
+            print(e)
+        finally:
+            conn.close()
