@@ -17,7 +17,7 @@ lock = 8
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 GPIO.setup(lock,GPIO.OUT)
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+#GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 continue_reading = True
 
