@@ -14,7 +14,7 @@ lock = 8
 
 
 # Настройка портов вывода
-GPIO.setmode(GPIO.BCM)
+#GPIO.setmode(GPIO.BCM)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 GPIO.setup(lock,GPIO.OUT)
