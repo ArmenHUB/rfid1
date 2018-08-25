@@ -17,8 +17,7 @@ lock = 8
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 GPIO.setup(lock,GPIO.OUT)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 
 continue_reading = True
 
@@ -70,9 +69,3 @@ while continue_reading:
             print(e)
         finally:
             conn.close()
-            
-    while True:
-        input_state = GPIO.input(18)
-        if input_state == False:
-            print('Button Pressed')
-            time.sleep(0.2)  
