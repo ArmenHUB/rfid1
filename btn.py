@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*
+
+import mysql.connector
+from mysql.connector import Error
+import signal
 import RPi.GPIO as GPIO
 import time
 
@@ -10,3 +16,16 @@ while True:
     if input_state == False:
         print('Button Pressed')
         time.sleep(0.2)
+        try:
+            conn = mysql.connector.connect(host='localhost',
+                                           database='Door',
+                                           user='root',
+                                           password='test1234')
+            if conn.is_connected():
+                cursor = conn.cursor()
+                sql = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (2,1")
+                cursor.execute(sql)
+        except Error as e:
+            print(e)
+        finally:
+            conn.close()        
