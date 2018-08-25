@@ -14,11 +14,11 @@ lock = 8
 
 
 # Настройка портов вывода
-GPIO.setmode(GPIO.BCM)
-#GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 GPIO.setup(lock,GPIO.OUT)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setmode(GPIO.BCM)
 
 continue_reading = True
 
