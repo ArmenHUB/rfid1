@@ -25,8 +25,6 @@ while True:
                     sql_insert = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (2,1)"
                     cursor1 = conn.cursor()
                     cursor1.execute(sql_insert)
-                    conn.commit()
-                    print('Added')
         except Error as e:
             print(e)
         finally:
