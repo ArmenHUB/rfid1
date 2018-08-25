@@ -23,7 +23,7 @@ while True:
                                            password='test1234')
             if conn.is_connected():
                 cursor = conn.cursor()
-                sql = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (2,1")
+                sql = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (2,1)"
                 cursor.execute(sql)
         except Error as e:
             print(e)
