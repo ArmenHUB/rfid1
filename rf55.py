@@ -71,6 +71,6 @@ while continue_reading:
         finally:
             conn.close()
             
-     while True:
-       if (GPIO.input(17)):
-         print("Button Pressed")   
+      while True:
+        if (GPIO.input(17)):
+          print("Button Pressed")   
