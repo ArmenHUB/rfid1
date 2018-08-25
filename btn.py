@@ -22,7 +22,7 @@ while True:
                                            user='root',
                                            password='test1234')
             if conn.is_connected():
-                    sql_insert = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (1,1)"
+                    sql_insert = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (2,1)"
                     cursor1 = conn.cursor()
                     cursor1.execute(sql_insert)
                     conn.commit()
