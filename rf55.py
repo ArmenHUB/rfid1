@@ -8,17 +8,16 @@ import signal
 import mysql.connector
 import RPi.GPIO as GPIO
 import time
+import os
 
 
+bell = 12
 lock = 8
 
-
-# Настройка портов вывода
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 GPIO.setup(lock,GPIO.OUT)
-
-
+GPIO.setup(bell, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 continue_reading = True
 
 def end_read(signal, frame):  # что делать, если программу прервать и как её прервать
@@ -34,38 +33,44 @@ while continue_reading:
     # Сканируем карты - считываем их UID
     (status, TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
-    # Если карту удалось считать, пишем "карта найдена"
-    if status == MIFAREReader.MI_OK:
-        print "Card detected"
-
-    # Считываем UID карты
-    (status, uid) = MIFAREReader.MFRC522_Anticoll()
-
-    # Если считали UID, то идем дальше
-    if status == MIFAREReader.MI_OK:
-        # выводим UID карты на экран
-        UIDcode = "%s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
+    input_state = GPIO.input(bell)
+    if input_state == False:
         try:
-            conn = mysql.connector.connect(host='localhost',
-                                           database='Door',
-                                           user='root',
-                                           password='test1234')
+            conn = mysql.connector.connect(host='localhost', database='Door', user='root', password='test1234')
             if conn.is_connected():
-                cursor = conn.cursor()
-                sql = "SELECT `userID` FROM `cards` WHERE `UID` = '%s'" % (UIDcode)
-                cursor.execute(sql)
-                row = cursor.fetchone()
-                while row is not None:
-                    row = cursor.fetchone()
                     sql_insert = "INSERT INTO `action`(`actionID`, `deviceID`) VALUES (1,1)"
                     cursor1 = conn.cursor()
                     cursor1.execute(sql_insert)
+                    conn.commit()
+                    print "bell pressed"                   
+        except Error as e:
+            print(e)
+        finally:
+            cursor1.close()
+            conn.close()
+
+    try:
+        conn1 = mysql.connector.connect(host='localhost', database='Door', user='root', password='test1234')
+        if conn1.is_connected():
+                sql_open = "SELECT * FROM `action` WHERE actionID = 2"
+                cursor = conn1.cursor()
+                cursor.execute(sql_open)
+                row = cursor.fetchone()
+                while row is not None:
                     GPIO.output(lock, GPIO.HIGH)
                     print "Door open"
                     time.sleep(2)
                     print "Door close"
                     GPIO.output(lock, GPIO.LOW)
-        except Error as e:
-            print(e)
-        finally:
-            conn.close()
+                    conn11 = mysql.connector.connect(host='localhost', database='Door', user='root', password='test1234')
+                    if conn11.is_connected():
+                        cursor11 = conn11.cursor()
+                        sql_remove = "DELETE  FROM `action` WHERE actionID = 2"
+                        cursor11.execute(sql_remove)
+                        conn11.commit()
+                        row = None
+
+    except Error as e:
+        print(e)
+    finally:
+        conn1.close()
